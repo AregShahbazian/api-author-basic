@@ -26,13 +26,13 @@ router.get('/', function (req, res) {
     // Filter
     const filteredData = filterData(authors, _filter);
     // Sort
-    const sortedData = sortData(filteredData, _sort)
+    const sortedData = sortData(filteredData, _sort);
     // Paginate
-    const pageData = paginateData(sortedData, _page)
+    const pageData = paginateData(sortedData, _page);
 
     const totalPages = _page ? Math.ceil(filteredData.length / _page.size) : undefined
 
-    const meta = _page ? {totalPages} : undefined
+    const meta = _page ? {totalPages} : undefined;
     const topLevelLinks = createTopLevelLinks(apiRoot, endpoint, {_filter, _sort, _page, totalPages});
 
     const serializer = new Serializer(author, {
@@ -51,9 +51,9 @@ router.get('/', function (req, res) {
 });
 
 router.get('/:id', function (req, res) {
-    const id = req.params.id
+    const id = req.params.id;
 
-    const data = authors.filter(a => a.id === id)[0]
+    const entity = authors.filter(a => a.id === id)[0];
 
     const topLevelLinks = createTopLevelLinks(apiRoot, endpoint, {id});
 
@@ -63,7 +63,44 @@ router.get('/:id', function (req, res) {
         topLevelLinks
     });
 
-    res.send(serializer.serialize(data));
+    res.send(serializer.serialize(entity));
+});
+
+router.post('/', function (req, res) {
+    const id = authors.length + 1;
+    const entity = {
+        id,
+        name: req.body.name,
+        age: req.body.age
+    };
+
+    authors.push(entity);
+    const topLevelLinks = createTopLevelLinks(apiRoot, endpoint, {id});
+
+    const serializer = new Serializer(author, {
+        ...serializeParams,
+        pluralizeType: false,
+        topLevelLinks
+    });
+
+    res.send(serializer.serialize(entity));
+});
+
+router.patch('/:id', function (req, res) {
+    const id = req.params.id;
+
+    let entity = authors.filter(a => a.id === id)[0];
+    entity = Object.assign(entity, req.body)
+
+    const topLevelLinks = createTopLevelLinks(apiRoot, endpoint, {id});
+
+    const serializer = new Serializer(author, {
+        ...serializeParams,
+        pluralizeType: false,
+        topLevelLinks
+    });
+
+    res.send(serializer.serialize(entity));
 });
 
 export default router

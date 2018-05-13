@@ -13,7 +13,7 @@ const entities = {}
 
 entities[publisher] = {
     serializeParams: {
-        attributes: authorAttributes,
+        attributes: publisherAttributes,
     },
     endpoint: "publisher",
 }
@@ -37,7 +37,7 @@ entities[book] = {
 
 entities[author] = {
     serializeParams: {
-        attributes: publisherAttributes,
+        attributes: authorAttributes,
     },
     endpoint: "author"
 }
