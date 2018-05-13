@@ -4,27 +4,34 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "babel-node": "babel-node --presets=env",
+    "babel-node": "babel-node --presets=env,stage-2",
     "build": "babel src -d dist",
     "start": "nodemon --exec npm run babel-node -- ./app.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "array-query": "^0.1.2",
     "cookie-parser": "~1.4.3",
     "express": "~4.16.0d",
-    "http-errors": "~1.6.2"
+    "http-errors": "~1.6.2",
+    "jsonapi-serializer": "^3.5.6",
+    "lodash": "^4.17.10",
+    "paginate-array": "^2.1.0",
+    "qs": "^6.5.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-2": "^6.24.1",
     "debug": "~2.6.9",
     "morgan": "~1.9.0",
     "nodemon": "^1.17.4"
   },
   "babel": {
     "presets": [
-      "env"
+      "env",
+      "stage-2"
     ]
   }
 }

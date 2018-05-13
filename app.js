@@ -1,10 +1,12 @@
 import express  from "express"
-import indexRouter from './routes/index'
+import {authorRouter} from './routes/index'
 
 const app = express();
+const PORT = 8081;
 
 app.use(express.json());
-app.use('/', indexRouter);
+app.use('/author', authorRouter);
 
-app.listen(3000, () => console.log('API listening on port 3000'));
+
+app.listen(PORT, () => console.log(`API listening on port ${PORT}`));
 
