@@ -1,0 +1,180 @@
+{
+	"info": {
+		"_postman_id": "b5886940-5ec0-4d81-8b20-30ba81e0764a",
+		"name": "api-author-basic",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:3000/ filter+sort+page",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8081/author?_filter[name][search]=Anonymous&_filter[age][gt]=40&_filter[age][lt]=60&_sort[0][name]=asc&_sort[1][age]=desc&_page[number]=1&_page[size]=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"author"
+					],
+					"query": [
+						{
+							"key": "_filter[name][search]",
+							"value": "Anonymous"
+						},
+						{
+							"key": "_filter[age][gt]",
+							"value": "40"
+						},
+						{
+							"key": "_filter[age][lt]",
+							"value": "60"
+						},
+						{
+							"key": "_sort[0][name]",
+							"value": "asc"
+						},
+						{
+							"key": "_sort[1][age]",
+							"value": "desc"
+						},
+						{
+							"key": "_page[number]",
+							"value": "1"
+						},
+						{
+							"key": "_page[size]",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/ filter+sort",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8081/author?_filter[name][search]=Anonymous&_filter[age][gt]=40&_filter[age][lt]=60&_sort[0][name]=asc&_sort[1][age]=desc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"author"
+					],
+					"query": [
+						{
+							"key": "_filter[name][search]",
+							"value": "Anonymous"
+						},
+						{
+							"key": "_filter[age][gt]",
+							"value": "40"
+						},
+						{
+							"key": "_filter[age][lt]",
+							"value": "60"
+						},
+						{
+							"key": "_sort[0][name]",
+							"value": "asc"
+						},
+						{
+							"key": "_sort[1][age]",
+							"value": "desc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/ filter+page",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8081/author?_filter[name][search]=Anonymous&_filter[age][gt]=40&_filter[age][lt]=60&_page[number]=1&_page[size]=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"author"
+					],
+					"query": [
+						{
+							"key": "_filter[name][search]",
+							"value": "Anonymous"
+						},
+						{
+							"key": "_filter[age][gt]",
+							"value": "40"
+						},
+						{
+							"key": "_filter[age][lt]",
+							"value": "60"
+						},
+						{
+							"key": "_page[number]",
+							"value": "1"
+						},
+						{
+							"key": "_page[size]",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/ sort+page",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:8081/author?_sort[0][name]=asc&_sort[1][age]=desc&_page[number]=1&_page[size]=5",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"author"
+					],
+					"query": [
+						{
+							"key": "_sort[0][name]",
+							"value": "asc"
+						},
+						{
+							"key": "_sort[1][age]",
+							"value": "desc"
+						},
+						{
+							"key": "_page[number]",
+							"value": "1"
+						},
+						{
+							"key": "_page[size]",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

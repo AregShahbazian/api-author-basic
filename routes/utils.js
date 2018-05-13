@@ -34,14 +34,17 @@ const filterData = (data, filterParams) => {
 };
 
 const sortData = (data, sortParams) => {
-    return orderBy(data, Object.keys(sortParams), Object.values(sortParams))
+    if (sortParams) {
+        return orderBy(data, Object.keys(sortParams), Object.values(sortParams))
+    }
+    return data
 };
 
 const paginateData = (data, paginateParams) => {
-    return {
-        pageData: paginate(data, paginateParams.number, paginateParams.size).data,
-        totalPages: Math.ceil(data.length / paginateParams.size)
+    if(paginateParams){
+        return paginate(data, paginateParams.number, paginateParams.size).data
     }
+    return data
 }
 
 const createQueryParams = (filterParams, sortingParams, pageNumber, pageSize) => {

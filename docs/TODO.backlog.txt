@@ -1,12 +1,18 @@
 
 
-Routes with express.Router
+Add Postman collection to git
 
-static data in a const object
+Routes with express.Router
+    author
+        by id
+        post
+        patch
+        delete
+
+    book
+    publisher
 
 Validation with joi
-
-jsonapi responses
 
 
 _______________________________________________________________________________________

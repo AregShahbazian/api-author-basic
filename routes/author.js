@@ -18,15 +18,25 @@ router.get('/', function (req, res) {
     // Sort
     const sortedData = sortData(filteredData, _sort)
     // Paginate
-    const {pageData, totalPages} = paginateData(sortedData, _page)
+    const pageData = paginateData(sortedData, _page)
 
-    const topLevelLinks = createTopLevelLinks(apiRoot, endpoint, _filter, _sort, _page, totalPages);
+    const totalPages = _page ? Math.ceil(data.length / _page.size) : undefined
+
+    const topLevelLinks =
+        _page ?
+            createTopLevelLinks(apiRoot, endpoint, _filter, _sort, _page, totalPages) :
+            undefined;
 
     const serializer = new Serializer(author, {
         attributes,
         pluralizeType: false,
         meta: {totalPages},
-        topLevelLinks
+        topLevelLinks,
+        dataLinks: {
+            self: function (data, o) {
+                return `${apiRoot}/${endpoint}/${o.id}`;
+            }
+        }
     });
 
     res.send(serializer.serialize(pageData));
