@@ -7,7 +7,19 @@ import {authors} from './data'
 
 const router = express.Router();
 
-const {apiRoot, entities: {author: {endpoint, attributes}}} = config
+const {
+    apiHost,
+    apiPort,
+    entities: {
+        author: {
+            endpoint,
+            serializeParams:
+                {attributes}
+        }
+    }
+} = config
+
+const apiRoot = `http://${apiHost}:${apiPort}`
 
 router.get('/', function (req, res) {
     const {_filter, _sort, _page} = parse(req.query);
@@ -20,12 +32,9 @@ router.get('/', function (req, res) {
     // Paginate
     const pageData = paginateData(sortedData, _page)
 
-    const totalPages = _page ? Math.ceil(data.length / _page.size) : undefined
+    const totalPages = _page ? Math.ceil(filteredData.length / _page.size) : undefined
 
-    const topLevelLinks =
-        _page ?
-            createTopLevelLinks(apiRoot, endpoint, _filter, _sort, _page, totalPages) :
-            undefined;
+    const topLevelLinks = createTopLevelLinks(apiRoot, endpoint, _filter, _sort, _page, totalPages);
 
     const serializer = new Serializer(author, {
         attributes,
@@ -41,6 +50,5 @@ router.get('/', function (req, res) {
 
     res.send(serializer.serialize(pageData));
 });
-
 
 export default router
