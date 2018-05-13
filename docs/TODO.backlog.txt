@@ -1,13 +1,13 @@
 
 
-Other entities
-    book
-    publisher
 
 
 _______________________________________________________________________________________
 **ADVANCED**
 
+Other entities
+    book
+    publisher
 Other HTTP status codes (201, 400 etc)
 headers
 error handling form missing inputs
