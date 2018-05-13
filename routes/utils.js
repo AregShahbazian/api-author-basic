@@ -41,52 +41,96 @@ const sortData = (data, sortParams) => {
 };
 
 const paginateData = (data, paginateParams) => {
-    if(paginateParams){
+    if (paginateParams) {
         return paginate(data, paginateParams.number, paginateParams.size).data
     }
     return data
 }
 
-const createQueryParams = (filterParams, sortingParams, pageNumber, pageSize) => {
+const createQueryParams = (filterParams, sortingParams, paginateParams) => {
     return stringify(
         {
             _filter: filterParams,
             _sort: sortingParams,
-            _page: {
-                number: pageNumber,
-                size: pageSize
-            }
+            _page: paginateParams
         },
         {encode: false});
 };
 
-const createFullUrl = (apiRoot, entityEndpoint, queryParams) => {
-    return `${apiRoot}/${entityEndpoint}?${queryParams}`
+const createFullUrl = (apiRoot, entityEndpoint, {id, queryParams}) => {
+    // console.log(id)
+    return `${apiRoot}/${entityEndpoint}` +
+        `${id ? '/' + id : ''}` +
+        `${queryParams ? '?' + queryParams : ''}`
 }
 
-const createTopLevelLinks = (apiRoot, entityEndpoint, filterParams, sortingParams, paginateParams, totalPages) => {
-    if(paginateParams){
+const createTopLevelLinks = (apiRoot, entityEndpoint,
+                             {
+                                 _filter: filterParams,
+                                 _sort: sortingParams,
+                                 _page: paginateParams,
+                                 totalPages,
+                                 id
+                             }) => {
+    if (id) {
+        return {self: createFullUrl(apiRoot, entityEndpoint, {id})}
+    } else if (paginateParams) {
         return {
-            self:
-                createFullUrl(apiRoot, entityEndpoint,
-                    createQueryParams(filterParams, sortingParams, paginateParams.number, paginateParams.size)),
-            first:
-                createFullUrl(apiRoot, entityEndpoint,
-                    createQueryParams(filterParams, sortingParams, 1, paginateParams.size)),
-            last:
-                createFullUrl(apiRoot, entityEndpoint,
-                    createQueryParams(filterParams, sortingParams, totalPages, paginateParams.size)),
-            prev: paginateParams.number > 1 ?
-                createFullUrl(apiRoot, entityEndpoint,
-                    createQueryParams(filterParams, sortingParams, parseInt(paginateParams.number) - 1, paginateParams.size))
+            self: createFullUrl(apiRoot, entityEndpoint,
+                {
+                    queryParams: createQueryParams(
+                        filterParams,
+                        sortingParams,
+                        paginateParams)
+                }),
+            first: createFullUrl(apiRoot, entityEndpoint,
+                {
+                    queryParams: createQueryParams(
+                        filterParams,
+                        sortingParams,
+                        {
+                            number: 1,
+                            size: paginateParams.size
+                        })
+                }),
+            last: createFullUrl(apiRoot, entityEndpoint,
+                {
+                    queryParams: createQueryParams(
+                        filterParams,
+                        sortingParams,
+                        {
+                            number: totalPages,
+                            size: paginateParams.size
+                        })
+                }),
+            prev: paginateParams.number > 1 ? createFullUrl(apiRoot, entityEndpoint, {
+                    queryParams: createQueryParams(
+                        filterParams,
+                        sortingParams,
+                        {
+                            number: parseInt(paginateParams.number) - 1,
+                            size: paginateParams.size
+                        })
+                })
                 : undefined,
-            next: paginateParams.number < totalPages ?
-                createFullUrl(apiRoot, entityEndpoint,
-                    createQueryParams(filterParams, sortingParams, parseInt(paginateParams.number) + 1, paginateParams.size))
+            next: paginateParams.number < totalPages ? createFullUrl(apiRoot, entityEndpoint,
+                {
+                    queryParams: createQueryParams(
+                        filterParams,
+                        sortingParams,
+                        {
+                            number: parseInt(paginateParams.number) + 1,
+                            size: paginateParams.size
+                        })
+                })
                 : undefined
         }
+    } else {
+        return {
+            self: createFullUrl(apiRoot, entityEndpoint,
+                {queryParams: createQueryParams(filterParams, sortingParams)})
+        }
     }
-    return undefined
 }
 
 export {createQueryParams, filterData, createTopLevelLinks, paginateData, sortData}

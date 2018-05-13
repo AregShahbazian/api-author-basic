@@ -32,12 +32,13 @@ router.get('/', function (req, res) {
 
     const totalPages = _page ? Math.ceil(filteredData.length / _page.size) : undefined
 
-    const topLevelLinks = createTopLevelLinks(apiRoot, endpoint, _filter, _sort, _page, totalPages);
+    const meta = _page ? {totalPages} : undefined
+    const topLevelLinks = createTopLevelLinks(apiRoot, endpoint, {_filter, _sort, _page, totalPages});
 
     const serializer = new Serializer(author, {
         ...serializeParams,
         pluralizeType: false,
-        meta: {totalPages},
+        meta,
         topLevelLinks,
         dataLinks: {
             self: function (data, o) {
@@ -50,19 +51,19 @@ router.get('/', function (req, res) {
 });
 
 router.get('/:id', function (req, res) {
+    const id = req.params.id
+
+    const data = authors.filter(a => a.id === id)[0]
+
+    const topLevelLinks = createTopLevelLinks(apiRoot, endpoint, {id});
 
     const serializer = new Serializer(author, {
         ...serializeParams,
         pluralizeType: false,
-        topLevelLinks,
-        dataLinks: {
-            self: function (data, o) {
-                return `${apiRoot}/${endpoint}/${o.id}`;
-            }
-        }
+        topLevelLinks
     });
 
-    res.send(serializer.serialize(pageData));
+    res.send(serializer.serialize(data));
 });
 
 export default router
