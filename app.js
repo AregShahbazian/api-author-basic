@@ -1,14 +1,10 @@
-const express = require('express');
-
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+import express  from "express"
+import indexRouter from './routes/index'
 
 const app = express();
 
 app.use(express.json());
-
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
-app.listen(3000, () => console.log('Example app listening on port 3000!'));
+app.listen(3000, () => console.log('API listening on port 3000'));
 
