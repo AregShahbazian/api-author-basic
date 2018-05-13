@@ -1,0 +1,6 @@
+
+Routes with express.Router
+
+static data in a const object
+
+Validation with joi
