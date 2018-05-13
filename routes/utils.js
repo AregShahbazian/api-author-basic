@@ -3,7 +3,7 @@ import query from 'array-query'
 import paginate from "paginate-array"
 import {stringify} from "qs";
 
-const applyRelation = (data, field, rel, val) => {
+export const applyRelation = (data, field, rel, val) => {
     switch (rel) {
         case 'gt':
             return query(field).gt(val).on(data);
@@ -20,7 +20,7 @@ const applyRelation = (data, field, rel, val) => {
     }
 }
 
-const filterData = (data, filterParams) => {
+export const filterData = (data, filterParams) => {
     if (filterParams) {
         let filteredData = cloneDeep(data)
         mapKeys(filterParams, (fieldFilters, field) => {
@@ -33,21 +33,21 @@ const filterData = (data, filterParams) => {
     return data
 };
 
-const sortData = (data, sortParams) => {
+export const sortData = (data, sortParams) => {
     if (sortParams) {
         return orderBy(data, Object.keys(sortParams), Object.values(sortParams))
     }
     return data
 };
 
-const paginateData = (data, paginateParams) => {
+export const paginateData = (data, paginateParams) => {
     if (paginateParams) {
         return paginate(data, paginateParams.number, paginateParams.size).data
     }
     return data
 }
 
-const createQueryParams = (filterParams, sortingParams, paginateParams) => {
+export const createQueryParams = (filterParams, sortingParams, paginateParams) => {
     return stringify(
         {
             _filter: filterParams,
@@ -57,21 +57,21 @@ const createQueryParams = (filterParams, sortingParams, paginateParams) => {
         {encode: false});
 };
 
-const createFullUrl = (apiRoot, entityEndpoint, {id, queryParams}) => {
+export const createFullUrl = (apiRoot, entityEndpoint, {id, queryParams}) => {
     // console.log(id)
     return `${apiRoot}/${entityEndpoint}` +
         `${id ? '/' + id : ''}` +
         `${queryParams ? '?' + queryParams : ''}`
 }
 
-const createTopLevelLinks = (apiRoot, entityEndpoint,
-                             {
-                                 _filter: filterParams,
-                                 _sort: sortingParams,
-                                 _page: paginateParams,
-                                 totalPages,
-                                 id
-                             }) => {
+export const createTopLevelLinks = (apiRoot, entityEndpoint,
+                                    {
+                                        _filter: filterParams,
+                                        _sort: sortingParams,
+                                        _page: paginateParams,
+                                        totalPages,
+                                        id
+                                    }) => {
     if (id) {
         return {self: createFullUrl(apiRoot, entityEndpoint, {id})}
     } else if (paginateParams) {
@@ -132,5 +132,3 @@ const createTopLevelLinks = (apiRoot, entityEndpoint,
         }
     }
 }
-
-export {createQueryParams, filterData, createTopLevelLinks, paginateData, sortData}

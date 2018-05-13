@@ -25,12 +25,15 @@ router.get('/', function (req, res) {
 
     // Filter
     const filteredData = filterData(authors, _filter);
+    const totalPages = _page ? Math.ceil(filteredData.length / _page.size) : undefined
     // Sort
     const sortedData = sortData(filteredData, _sort);
-    // Paginate
-    const pageData = paginateData(sortedData, _page);
 
-    const totalPages = _page ? Math.ceil(filteredData.length / _page.size) : undefined
+    // Paginate
+    if(_page.number > totalPages){
+        return res.status(404).send({message: `Page number ${_page.number} doesn't exist`})
+    }
+    const pageData = paginateData(sortedData, _page);
 
     const meta = _page ? {totalPages} : undefined;
     const topLevelLinks = createTopLevelLinks(apiRoot, endpoint, {_filter, _sort, _page, totalPages});
@@ -54,6 +57,10 @@ router.get('/:id', function (req, res) {
     const id = req.params.id;
 
     const entity = authors.filter(a => a.id === id)[0];
+
+    if(!entity){
+        return res.status(404).send({message: `Entity with id '${id}' doesn't exist`})
+    }
 
     const topLevelLinks = createTopLevelLinks(apiRoot, endpoint, {id});
 
@@ -90,6 +97,10 @@ router.patch('/:id', function (req, res) {
     const id = req.params.id;
 
     let entity = authors.filter(a => a.id === id)[0];
+    if(!entity){
+        return res.status(404).send({message: `Entity with id '${id}' doesn't exist`})
+    }
+
     entity = Object.assign(entity, req.body)
 
     const topLevelLinks = createTopLevelLinks(apiRoot, endpoint, {id});
@@ -107,6 +118,10 @@ router.delete('/:id', function (req, res) {
     const id = req.params.id;
 
     let entity = authors.filter(a => a.id === id)[0];
+    if(!entity){
+        return res.status(404).send({message: `Entity with id '${id}' doesn't exist`})
+    }
+
     authors.splice(authors.indexOf(entity), 1)
 
     const serializer = new Serializer(author, {

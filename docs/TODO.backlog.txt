@@ -1,10 +1,5 @@
 
 
-
-404 when
-    not found
-    page out of bounds
-
 Other entities
     book
     publisher
@@ -13,7 +8,7 @@ Other entities
 _______________________________________________________________________________________
 **ADVANCED**
 
-Other HTTP status codes (201 etc)
+Other HTTP status codes (201, 400 etc)
 headers
 error handling form missing inputs
 Validation with joi
@@ -44,4 +39,9 @@ Routes with express.Router
    *     post
    *     patch
    *     delete
+
+
+404 when
+    not found
+    page out of bounds
 
