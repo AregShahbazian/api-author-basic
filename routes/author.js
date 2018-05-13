@@ -30,7 +30,7 @@ router.get('/', function (req, res) {
     const sortedData = sortData(filteredData, _sort);
 
     // Paginate
-    if(_page.number > totalPages){
+    if(_page && _page.number > totalPages){
         return res.status(404).send({message: `Page number ${_page.number} doesn't exist`})
     }
     const pageData = paginateData(sortedData, _page);
