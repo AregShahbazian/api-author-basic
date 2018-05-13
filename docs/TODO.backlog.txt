@@ -1,21 +1,22 @@
 
 
-toplevel links also without _page
 
-Routes with express.Router
-    author
-   *     by id
-        post
-        patch
-        delete
-
-
-Validation with joi
-
+404 when
+    not found
+    page out of bounds
 
 Other entities
     book
     publisher
+
+
+_______________________________________________________________________________________
+**ADVANCED**
+
+Other HTTP status codes (201 etc)
+headers
+error handling form missing inputs
+Validation with joi
 
 _______________________________________________________________________________________
 IN CASE
@@ -34,4 +35,13 @@ Environment variables managed with dotenv
     https://github.com/motdotla/dotenv
 
 Add Postman collection to git
+
+toplevel links also without _page
+
+Routes with express.Router
+    author
+   *     by id
+   *     post
+   *     patch
+   *     delete
 

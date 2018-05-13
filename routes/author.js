@@ -103,4 +103,18 @@ router.patch('/:id', function (req, res) {
     res.send(serializer.serialize(entity));
 });
 
+router.delete('/:id', function (req, res) {
+    const id = req.params.id;
+
+    let entity = authors.filter(a => a.id === id)[0];
+    authors.splice(authors.indexOf(entity), 1)
+
+    const serializer = new Serializer(author, {
+        ...serializeParams,
+        pluralizeType: false
+    });
+
+    res.send(serializer.serialize(entity));
+});
+
 export default router

@@ -436,6 +436,38 @@
 						}
 					],
 					"_postman_isSubFolder": true
+				},
+				{
+					"name": "DELETE",
+					"description": "",
+					"item": [
+						{
+							"name": "/ age",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "localhost:8081/author/a1",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"author",
+										"a1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
 				}
 			]
 		}
