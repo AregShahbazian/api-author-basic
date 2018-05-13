@@ -1,7 +1,7 @@
-import {stringify} from 'qs'
-import {cloneDeep, mapKeys} from 'lodash';
+import {cloneDeep, mapKeys, orderBy} from 'lodash';
 import query from 'array-query'
-
+import paginate from "paginate-array"
+import {stringify} from "qs";
 
 const applyRelation = (data, field, rel, val) => {
     switch (rel) {
@@ -13,37 +13,49 @@ const applyRelation = (data, field, rel, val) => {
             return query(field).lt(val).on(data);
         case 'lte':
             return query(field).lte(val).on(data);
-        case 'is':
-            return query(field).is(val).on(data);
+        case 'search':
+            return query(field).search(val).on(data);
         default:
             return data
     }
 }
 
-const filterData = (data, filters) => {
-    let filteredData = cloneDeep(data)
-    mapKeys(filters, (filter, field) => {
-        if (typeof filter === 'object') {
-            mapKeys(filter, (val, rel) => {
+const filterData = (data, filterParams) => {
+    if (filterParams) {
+        let filteredData = cloneDeep(data)
+        mapKeys(filterParams, (fieldFilters, field) => {
+            mapKeys(fieldFilters, (val, rel) => {
                 filteredData = applyRelation(filteredData, field, rel, val)
             })
-        } else {
-            filteredData = query(field).search(filter).on(filteredData)
-        }
-    });
-    return filteredData;
+        });
+        return filteredData;
+    }
+    return data
 };
 
-const constructFullEndpoint = (filters, currentPage, pageSize, sortingComboString, endpoint) => {
-    let filterQuery = !Object.keys(filters).length ? `${stringify(filters, {encode: false})}` : '';
-    let pageQuery = `_page[number]=${currentPage}&_page[size]=${pageSize}`;
-    let sortingQuery = sortingComboString ? `_sort=${sortingComboString}` : '';
-    let queryString = [filterQuery, pageQuery, sortingQuery].filter(s => s.length).join('&');
-    return `/${endpoint}?${queryString}`;
+const sortData = (data, sortParams) => {
+    return orderBy(data, Object.keys(sortParams), Object.values(sortParams))
 };
 
-const getById = (data, id) => {
-    return data.filter(o => o.id === id)[0]
+const paginateData = (data, paginateParams) => {
+    return {
+        pageData: paginate(data, paginateParams.number, paginateParams.size).data,
+        totalPages: Math.ceil(data.length / paginateParams.size)
+    }
 }
 
-export {filterData, constructFullEndpoint, getById}
+const constructQueryParas = (filterParams, sortingParams, pageNumber, pageSize) => {
+    return stringify(
+        {
+            _filter: filterParams,
+            _sort: sortingParams,
+            _page: {
+                number: pageNumber,
+                size: pageSize
+            }
+        },
+        {encode: false});
+};
+
+
+export {constructQueryParas, filterData, paginateData, sortData}

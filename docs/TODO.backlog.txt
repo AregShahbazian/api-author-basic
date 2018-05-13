@@ -21,3 +21,6 @@ HISTORY
 
 ES6 babel setup
     https://gist.github.com/samuele-artuso/d39dc04650f9455e34549841a8270c82
+
+Environment variables managed with dotenv
+    https://github.com/motdotla/dotenv
