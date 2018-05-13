@@ -1,19 +1,21 @@
 
 
-Add Postman collection to git
+toplevel links also without _page
 
 Routes with express.Router
     author
-        by id
+   *     by id
         post
         patch
         delete
 
-    book
-    publisher
 
 Validation with joi
 
+
+Other entities
+    book
+    publisher
 
 _______________________________________________________________________________________
 IN CASE
@@ -30,3 +32,6 @@ ES6 babel setup
 
 Environment variables managed with dotenv
     https://github.com/motdotla/dotenv
+
+Add Postman collection to git
+

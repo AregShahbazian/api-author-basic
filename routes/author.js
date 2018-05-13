@@ -13,8 +13,7 @@ const {
     entities: {
         author: {
             endpoint,
-            serializeParams:
-                {attributes}
+            serializeParams
         }
     }
 } = config
@@ -24,7 +23,6 @@ const apiRoot = `http://${apiHost}:${apiPort}`
 router.get('/', function (req, res) {
     const {_filter, _sort, _page} = parse(req.query);
 
-    console.log("---------------------------------")
     // Filter
     const filteredData = filterData(authors, _filter);
     // Sort
@@ -37,9 +35,25 @@ router.get('/', function (req, res) {
     const topLevelLinks = createTopLevelLinks(apiRoot, endpoint, _filter, _sort, _page, totalPages);
 
     const serializer = new Serializer(author, {
-        attributes,
+        ...serializeParams,
         pluralizeType: false,
         meta: {totalPages},
+        topLevelLinks,
+        dataLinks: {
+            self: function (data, o) {
+                return `${apiRoot}/${endpoint}/${o.id}`;
+            }
+        }
+    });
+
+    res.send(serializer.serialize(pageData));
+});
+
+router.get('/:id', function (req, res) {
+
+    const serializer = new Serializer(author, {
+        ...serializeParams,
+        pluralizeType: false,
         topLevelLinks,
         dataLinks: {
             self: function (data, o) {
