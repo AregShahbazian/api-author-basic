@@ -44,7 +44,7 @@ const paginateData = (data, paginateParams) => {
     }
 }
 
-const constructQueryParas = (filterParams, sortingParams, pageNumber, pageSize) => {
+const createQueryParams = (filterParams, sortingParams, pageNumber, pageSize) => {
     return stringify(
         {
             _filter: filterParams,
@@ -57,5 +57,30 @@ const constructQueryParas = (filterParams, sortingParams, pageNumber, pageSize) 
         {encode: false});
 };
 
+const createFullUrl = (apiRoot, entityEndpoint, queryParams) => {
+    return `${apiRoot}/${entityEndpoint}?${queryParams}`
+}
 
-export {constructQueryParas, filterData, paginateData, sortData}
+const createTopLevelLinks = (apiRoot, entityEndpoint, filterParams, sortingParams, paginateParams, totalPages) => {
+    return {
+        self:
+            createFullUrl(apiRoot, entityEndpoint,
+                createQueryParams(filterParams, sortingParams, paginateParams.number, paginateParams.size)),
+        first:
+            createFullUrl(apiRoot, entityEndpoint,
+                createQueryParams(filterParams, sortingParams, 1, paginateParams.size)),
+        last:
+            createFullUrl(apiRoot, entityEndpoint,
+                createQueryParams(filterParams, sortingParams, totalPages, paginateParams.size)),
+        prev: paginateParams.number > 1 ?
+            createFullUrl(apiRoot, entityEndpoint,
+                createQueryParams(filterParams, sortingParams, parseInt(paginateParams.number) - 1, paginateParams.size))
+            : undefined,
+        next: paginateParams.number < totalPages ?
+            createFullUrl(apiRoot, entityEndpoint,
+                createQueryParams(filterParams, sortingParams, parseInt(paginateParams.number) + 1, paginateParams.size))
+            : undefined
+    }
+}
+
+export {createQueryParams, filterData, createTopLevelLinks, paginateData, sortData}
